@@ -64,4 +64,5 @@ public class ClubServiceImpl implements ClubService {
         club.getPlayers().add(player);
         clubRepository.save(club);
     }
+
 }

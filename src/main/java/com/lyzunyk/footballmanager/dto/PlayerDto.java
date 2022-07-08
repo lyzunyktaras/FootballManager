@@ -7,6 +7,6 @@ public class PlayerDto {
     private String name;
     private String surname;
     private int age;
-    private double experience;
+    private double monthsExperience;
     private Long clubId;
 }

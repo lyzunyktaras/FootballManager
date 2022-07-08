@@ -14,6 +14,9 @@ public class Wallet {
     private Long id;
     private double total;
 
+    @OneToOne
+    private Club club;
+
     @OneToMany
     private Set<Transaction> transactions;
 

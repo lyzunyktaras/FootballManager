@@ -3,7 +3,6 @@ package com.lyzunyk.footballmanager.service.impl;
 import com.lyzunyk.footballmanager.dto.PlayerDto;
 import com.lyzunyk.footballmanager.model.Club;
 import com.lyzunyk.footballmanager.model.Player;
-import com.lyzunyk.footballmanager.repository.ClubRepository;
 import com.lyzunyk.footballmanager.repository.PlayerRepository;
 import com.lyzunyk.footballmanager.service.ClubService;
 import com.lyzunyk.footballmanager.service.PlayerService;
@@ -46,9 +45,20 @@ public class PlayerServiceImpl implements PlayerService {
         player.setName(playerDto.getName());
         player.setSurname(playerDto.getSurname());
         player.setAge(playerDto.getAge());
-        player.setExperience(playerDto.getExperience());
+        player.setMonthsExperience(playerDto.getMonthsExperience());
         playerRepository.save(player);
         clubService.addPlayerToClub(playerDto.getClubId(), player.getId());
         return player;
+    }
+
+    public void transferPlayer(Long playerId, Long clubId) {
+        Player player = findPlayerById(playerId);
+        Club club = clubService.findClubById(clubId);
+        clubService.addPlayerToClub(clubId, playerId);
+    }
+
+    @Override
+    public Double calculatePlayerCost(Player player) {
+        return (player.getMonthsExperience() * 100000) / player.getAge();
     }
 }

@@ -18,5 +18,5 @@ public class Player {
 
     private int age;
 
-    private double experience;
+    private double monthsExperience;
 }
