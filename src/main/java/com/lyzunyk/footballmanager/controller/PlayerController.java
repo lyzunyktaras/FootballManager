@@ -1,12 +1,10 @@
 package com.lyzunyk.footballmanager.controller;
 
 import com.lyzunyk.footballmanager.model.Player;
+import com.lyzunyk.footballmanager.dto.PlayerDto;
 import com.lyzunyk.footballmanager.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,5 +32,9 @@ public class PlayerController {
         return playerService.findPlayerByName(name);
     }
 
+    @PostMapping("/player")
+    public Player addPlayer(@RequestBody PlayerDto playerDto){
+        return playerService.addPlayer(playerDto);
+    }
 
 }

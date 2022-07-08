@@ -1,7 +1,11 @@
 package com.lyzunyk.footballmanager.service.impl;
 
+import com.lyzunyk.footballmanager.dto.PlayerDto;
+import com.lyzunyk.footballmanager.model.Club;
 import com.lyzunyk.footballmanager.model.Player;
+import com.lyzunyk.footballmanager.repository.ClubRepository;
 import com.lyzunyk.footballmanager.repository.PlayerRepository;
+import com.lyzunyk.footballmanager.service.ClubService;
 import com.lyzunyk.footballmanager.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,10 +16,13 @@ import java.util.List;
 public class PlayerServiceImpl implements PlayerService {
 
     private final PlayerRepository playerRepository;
+    private final ClubService clubService;
 
     @Autowired
-    public PlayerServiceImpl(PlayerRepository playerRepository) {
+    public PlayerServiceImpl(PlayerRepository playerRepository,
+                             ClubService clubService) {
         this.playerRepository = playerRepository;
+        this.clubService = clubService;
     }
 
     @Override
@@ -31,5 +38,17 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public List<Player> findAll() {
         return playerRepository.findAll();
+    }
+
+    @Override
+    public Player addPlayer(PlayerDto playerDto) {
+        Player player = new Player();
+        player.setName(playerDto.getName());
+        player.setSurname(playerDto.getSurname());
+        player.setAge(playerDto.getAge());
+        player.setExperience(playerDto.getExperience());
+        playerRepository.save(player);
+        clubService.addPlayerToClub(playerDto.getClubId(), player.getId());
+        return player;
     }
 }

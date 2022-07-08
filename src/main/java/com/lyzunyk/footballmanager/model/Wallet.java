@@ -3,6 +3,7 @@ package com.lyzunyk.footballmanager.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Data
 @Entity
@@ -12,4 +13,8 @@ public class Wallet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private double total;
+
+    @OneToMany
+    private Set<Transaction> transactions;
+
 }
