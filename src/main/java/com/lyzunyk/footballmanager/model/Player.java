@@ -2,14 +2,15 @@ package com.lyzunyk.footballmanager.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
+@Table(name = "player")
 public class Player {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String name;
 
@@ -17,5 +18,5 @@ public class Player {
 
     private int age;
 
-    private double experience;
+    private double monthsExperience;
 }
