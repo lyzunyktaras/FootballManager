@@ -2,20 +2,14 @@ package com.lyzunyk.footballmanager.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.util.Set;
+import javax.persistence.*;
 
 @Data
 @Entity
+@Table(name = "wallet")
 public class Wallet {
     @Id
-    private String id;
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private double total;
-
-    @OneToMany
-    private Set<Transaction> transactions;
-
 }
