@@ -46,19 +46,11 @@ public class PlayerServiceImpl implements PlayerService {
         player.setSurname(playerDto.getSurname());
         player.setAge(playerDto.getAge());
         player.setMonthsExperience(playerDto.getMonthsExperience());
+        player.setClubId(playerDto.getClubId());
         playerRepository.save(player);
-        clubService.addPlayerToClub(playerDto.getClubId(), player.getId());
+        clubService.addPlayerToClub(playerDto.getClubId(), player);
         return player;
     }
 
-    public void transferPlayer(Long playerId, Long clubId) {
-        Player player = findPlayerById(playerId);
-        Club club = clubService.findClubById(clubId);
-        clubService.addPlayerToClub(clubId, playerId);
-    }
 
-    @Override
-    public Double calculatePlayerCost(Player player) {
-        return (player.getMonthsExperience() * 100000) / player.getAge();
-    }
 }

@@ -1,6 +1,7 @@
 package com.lyzunyk.footballmanager.service;
 
-import com.lyzunyk.footballmanager.dto.TransactionDto;
+import com.lyzunyk.footballmanager.model.Club;
+import com.lyzunyk.footballmanager.model.Player;
 import com.lyzunyk.footballmanager.model.Transaction;
 
 import java.util.List;
@@ -10,5 +11,5 @@ public interface TransactionService {
 
     List<Transaction> findAll();
 
-    Transaction createTransaction(TransactionDto transactionDto);
+    Transaction createTransaction(Club clubBuyer, Player player,double playerCost);
 }

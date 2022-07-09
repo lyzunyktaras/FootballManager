@@ -6,8 +6,8 @@ import com.lyzunyk.footballmanager.model.Player;
 import com.lyzunyk.footballmanager.model.Wallet;
 import com.lyzunyk.footballmanager.repository.ClubRepository;
 import com.lyzunyk.footballmanager.repository.PlayerRepository;
-import com.lyzunyk.footballmanager.repository.WalletRepository;
 import com.lyzunyk.footballmanager.service.ClubService;
+import com.lyzunyk.footballmanager.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,15 +17,15 @@ import java.util.List;
 public class ClubServiceImpl implements ClubService {
 
     private final ClubRepository clubRepository;
-    private final WalletRepository walletRepository;
+    private final WalletService walletService;
     private final PlayerRepository playerRepository;
 
     @Autowired
     public ClubServiceImpl(ClubRepository clubRepository,
-                           WalletRepository walletRepository,
+                           WalletService walletService,
                            PlayerRepository playerRepository) {
         this.clubRepository = clubRepository;
-        this.walletRepository = walletRepository;
+        this.walletService = walletService;
         this.playerRepository = playerRepository;
     }
 
@@ -49,20 +49,23 @@ public class ClubServiceImpl implements ClubService {
         Club club = new Club();
         club.setName(clubDto.getName());
         club.setCommission(clubDto.getCommission());
-        Wallet wallet = new Wallet();
-        wallet.setTotal(clubDto.getTotal());
-        club.setWallet(wallet);
-        walletRepository.save(wallet);
+        club.setWallet(walletService.addWallet(club,clubDto.getTotal()));
         clubRepository.save(club);
         return club;
     }
 
     @Override
-    public void addPlayerToClub(Long clubId, Long playerId){
+    public void addPlayerToClub(Long clubId, Player player) {
         Club club = clubRepository.findClubById(clubId);
-        Player player = playerRepository.findPlayerById(playerId);
         club.getPlayers().add(player);
         clubRepository.save(club);
+    }
+
+    @Override
+    public void transferPlayer(Club clubSeller, Club clubBuyer, Player player) {
+        clubBuyer.getPlayers().add(player);
+        clubSeller.getPlayers().remove(player);
+        player.setClubId(clubBuyer.getId());
     }
 
 }

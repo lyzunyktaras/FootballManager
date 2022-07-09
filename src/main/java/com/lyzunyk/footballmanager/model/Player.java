@@ -19,4 +19,6 @@ public class Player {
     private int age;
 
     private double monthsExperience;
+
+    private Long clubId;
 }

@@ -1,6 +1,5 @@
 package com.lyzunyk.footballmanager.controller;
 
-import com.lyzunyk.footballmanager.dto.TransactionDto;
 import com.lyzunyk.footballmanager.model.Transaction;
 import com.lyzunyk.footballmanager.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +27,8 @@ public class TransactionController {
         return transactionService.findTransactionById(id);
     }
 
-    @PostMapping("/transaction")
-    public Transaction createTransaction(@RequestBody TransactionDto transactionDto){
-        return transactionService.createTransaction(transactionDto);
-    }
+    //@PostMapping("/transaction")
+    //public Transaction createTransaction(@RequestBody TransactionDto transactionDto){
+    //    return transactionService.createTransaction(transactionDto);
+    //}
 }

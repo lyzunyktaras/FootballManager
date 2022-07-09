@@ -1,11 +1,10 @@
 package com.lyzunyk.footballmanager.controller;
 
+import com.lyzunyk.footballmanager.dto.TransferDto;
 import com.lyzunyk.footballmanager.model.Transfer;
 import com.lyzunyk.footballmanager.service.TransferService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,4 +28,8 @@ public class TransferController {
         return transferService.findTransferById(id);
     }
 
+    @PostMapping("/transfer")
+    public Transfer createTransfer(@RequestBody TransferDto transferDto){
+        return transferService.createTransfer(transferDto);
+    }
 }

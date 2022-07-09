@@ -15,8 +15,7 @@ public class Transaction {
     private Long buyerId;
     private Long sellerId;
 
-    @OneToOne
-    private Player player;
+    private Long playerId;
 
     private double price;
     private double commission;

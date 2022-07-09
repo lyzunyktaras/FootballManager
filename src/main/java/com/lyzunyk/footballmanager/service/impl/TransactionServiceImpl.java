@@ -1,6 +1,5 @@
 package com.lyzunyk.footballmanager.service.impl;
 
-import com.lyzunyk.footballmanager.dto.TransactionDto;
 import com.lyzunyk.footballmanager.model.Club;
 import com.lyzunyk.footballmanager.model.Player;
 import com.lyzunyk.footballmanager.model.Transaction;
@@ -16,20 +15,14 @@ public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionRepository transactionRepository;
     private final ClubService clubService;
-    private final PlayerService playerService;
-    private final TransferService transferService;
     private final WalletService walletService;
 
     @Autowired
     public TransactionServiceImpl(TransactionRepository transactionRepository,
                                   ClubService clubService,
-                                  PlayerService playerService,
-                                  TransferService transferService,
                                   WalletService walletService) {
         this.transactionRepository = transactionRepository;
         this.clubService = clubService;
-        this.playerService = playerService;
-        this.transferService = transferService;
         this.walletService = walletService;
     }
 
@@ -44,29 +37,30 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Transaction createTransaction(TransactionDto transactionDto){
+    public Transaction createTransaction(Club clubBuyer, Player player,double playerCost) {
         Transaction transaction = new Transaction();
-        Club seller = clubService.findClubById(transactionDto.getSellerId());
-        Club buyer = clubService.findClubById(transactionDto.getBuyerId());
-        Player player = playerService.findPlayerById(transactionDto.getPlayerId());
-        double playerCost = playerService.calculatePlayerCost(player);
-        double totalPrice = calculateTransaction(seller.getCommission(), playerCost);
-        transaction.setBuyerId(buyer.getId());
-        transaction.setSellerId(seller.getId());
-        transaction.setPlayer(player);
+        Club clubSeller = clubService.findClubById(player.getClubId());
+        double totalPrice = calculateTransaction(clubSeller.getCommission(), playerCost);
+
+        doTransaction(clubSeller,clubBuyer,player,totalPrice);
+
+        transaction.setBuyerId(clubBuyer.getId());
+        transaction.setSellerId(clubSeller.getId());
+        transaction.setPlayerId(player.getId());
         transaction.setPrice(playerCost);
-        transaction.setCommission(seller.getCommission());
+        transaction.setCommission(clubSeller.getCommission());
         transaction.setTotalPrice(totalPrice);
-
-        walletService.buyPlayer(buyer, totalPrice);
-        walletService.sellPlayer(seller, totalPrice);
-
-        transactionRepository.save(transaction);
+        //transactionRepository.save(transaction);
         return transaction;
     }
 
-    private double calculateTransaction(double commission, double price){
-        return price+((price*commission)/100);
+    private void doTransaction(Club clubSeller, Club clubBuyer, Player player, double totalPrice){
+        walletService.processPayment(clubSeller, clubBuyer, totalPrice);
+        clubService.transferPlayer(clubSeller, clubBuyer, player);
+    }
+
+    private double calculateTransaction(double commission, double price) {
+        return price + ((price * commission) / 100);
     }
 
 }

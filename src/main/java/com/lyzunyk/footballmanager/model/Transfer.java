@@ -16,5 +16,4 @@ public class Transfer {
     private Player player;
 
     private double cost;
-    private boolean purchase;
 }
