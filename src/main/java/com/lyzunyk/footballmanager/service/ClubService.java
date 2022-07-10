@@ -3,6 +3,7 @@ package com.lyzunyk.footballmanager.service;
 import com.lyzunyk.footballmanager.dto.ClubDto;
 import com.lyzunyk.footballmanager.model.Club;
 import com.lyzunyk.footballmanager.model.Player;
+import com.lyzunyk.footballmanager.model.Transfer;
 
 import java.util.List;
 
@@ -15,7 +16,9 @@ public interface ClubService {
 
     Club addClub(ClubDto clubDto);
 
-    void addPlayerToClub(Long clubId, Player player);
+    void addPlayerToClub(Club club, Player player);
 
     void transferPlayer(Club clubSeller, Club clubBuyer, Player player);
+
+    void addTransferToClub(Transfer transfer, Club club);
 }

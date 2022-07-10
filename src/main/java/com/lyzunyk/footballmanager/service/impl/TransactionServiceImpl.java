@@ -1,66 +1,65 @@
 package com.lyzunyk.footballmanager.service.impl;
 
-import com.lyzunyk.footballmanager.model.Club;
-import com.lyzunyk.footballmanager.model.Player;
+import com.lyzunyk.footballmanager.dto.TransferDetailsDto;
+import com.lyzunyk.footballmanager.exception.NotExistException;
 import com.lyzunyk.footballmanager.model.Transaction;
 import com.lyzunyk.footballmanager.repository.TransactionRepository;
-import com.lyzunyk.footballmanager.service.*;
+import com.lyzunyk.footballmanager.service.ClubService;
+import com.lyzunyk.footballmanager.service.TransactionService;
+import com.lyzunyk.footballmanager.service.WalletService;
+import com.lyzunyk.footballmanager.strategy.ProcessPaymentStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
+    private static final String TRANSACTION_NOT_FOUND_BY_ID = "Transaction with id: %s not found";
+    private static final String TRANSACTIONS_NOT_FOUND = "Transactions not found";
 
     private final TransactionRepository transactionRepository;
-    private final ClubService clubService;
     private final WalletService walletService;
+    private final ProcessPaymentStrategy processPaymentStrategy;
 
     @Autowired
     public TransactionServiceImpl(TransactionRepository transactionRepository,
-                                  ClubService clubService,
-                                  WalletService walletService) {
+                                  WalletService walletService,
+                                  ProcessPaymentStrategy processPaymentStrategy) {
         this.transactionRepository = transactionRepository;
-        this.clubService = clubService;
         this.walletService = walletService;
+        this.processPaymentStrategy = processPaymentStrategy;
     }
 
     @Override
     public Transaction findTransactionById(Long id) {
-        return transactionRepository.findTransactionById(id);
+        Optional<Transaction> transaction = Optional.ofNullable(transactionRepository.findTransactionById(id));
+        if (transaction.isEmpty()) {
+            throw new NotExistException(String.format(TRANSACTION_NOT_FOUND_BY_ID, id));
+        }
+        return transaction.get();
     }
 
     @Override
     public List<Transaction> findAll() {
-        return transactionRepository.findAll();
+        List<Transaction> transactions = transactionRepository.findAll();
+        if (transactions.isEmpty()) {
+            throw new NotExistException(TRANSACTIONS_NOT_FOUND);
+        }
+        return transactions;
     }
 
     @Override
-    public Transaction createTransaction(Club clubBuyer, Player player,double playerCost) {
-        Transaction transaction = new Transaction();
-        Club clubSeller = clubService.findClubById(player.getClubId());
-        double totalPrice = calculateTransaction(clubSeller.getCommission(), playerCost);
+    @Transactional
+    public Transaction processPayment(TransferDetailsDto transferDetailsDto) {
+        Transaction transaction = processPaymentStrategy.processTransaction(transferDetailsDto);
+        transactionRepository.save(transaction);
 
-        doTransaction(clubSeller,clubBuyer,player,totalPrice);
+        walletService.addTransactionToWallet(transaction, transferDetailsDto.getSeller().getWallet());
+        walletService.addTransactionToWallet(transaction, transferDetailsDto.getBuyer().getWallet());
 
-        transaction.setBuyerId(clubBuyer.getId());
-        transaction.setSellerId(clubSeller.getId());
-        transaction.setPlayerId(player.getId());
-        transaction.setPrice(playerCost);
-        transaction.setCommission(clubSeller.getCommission());
-        transaction.setTotalPrice(totalPrice);
-        //transactionRepository.save(transaction);
         return transaction;
     }
-
-    private void doTransaction(Club clubSeller, Club clubBuyer, Player player, double totalPrice){
-        walletService.processPayment(clubSeller, clubBuyer, totalPrice);
-        clubService.transferPlayer(clubSeller, clubBuyer, player);
-    }
-
-    private double calculateTransaction(double commission, double price) {
-        return price + ((price * commission) / 100);
-    }
-
 }

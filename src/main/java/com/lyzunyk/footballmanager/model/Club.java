@@ -24,6 +24,6 @@ public class Club {
     @OneToOne
     private Wallet wallet;
 
-    @OneToMany
+    @ManyToMany
     private List<Transfer> transfers;
 }

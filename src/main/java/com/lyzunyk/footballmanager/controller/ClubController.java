@@ -19,7 +19,7 @@ public class ClubController {
     }
 
     @GetMapping("/clubs")
-    public List<Club> getClubById() {
+    public List<Club> findAllClubs() {
         return clubService.findAll();
     }
 
@@ -34,7 +34,7 @@ public class ClubController {
     }
 
     @PostMapping("/club")
-    public Club addClub(@RequestBody ClubDto clubDto){
+    public Club addClub(@RequestBody ClubDto clubDto) {
         return clubService.addClub(clubDto);
     }
 }

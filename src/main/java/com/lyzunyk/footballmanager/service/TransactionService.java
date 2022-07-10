@@ -1,5 +1,6 @@
 package com.lyzunyk.footballmanager.service;
 
+import com.lyzunyk.footballmanager.dto.TransferDetailsDto;
 import com.lyzunyk.footballmanager.model.Club;
 import com.lyzunyk.footballmanager.model.Player;
 import com.lyzunyk.footballmanager.model.Transaction;
@@ -11,5 +12,5 @@ public interface TransactionService {
 
     List<Transaction> findAll();
 
-    Transaction createTransaction(Club clubBuyer, Player player,double playerCost);
+    Transaction processPayment(TransferDetailsDto transferDetailsDto);
 }

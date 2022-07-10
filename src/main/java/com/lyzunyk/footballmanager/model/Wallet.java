@@ -14,7 +14,7 @@ public class Wallet {
     private Long id;
     private double total;
 
-    @OneToMany
+    @ManyToMany
     private Set<Transaction> transactions;
 
 }

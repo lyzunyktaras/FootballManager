@@ -14,22 +14,22 @@ public class TransferController {
     private final TransferService transferService;
 
     @Autowired
-    public TransferController(TransferService transferService){
+    public TransferController(TransferService transferService) {
         this.transferService = transferService;
     }
 
     @GetMapping("/transfers")
-    public List<Transfer> findAll(){
+    public List<Transfer> findAll() {
         return transferService.findAll();
     }
 
     @GetMapping("/transfer/{id}")
-    public Transfer findTransferById(@PathVariable Long id){
+    public Transfer findTransferById(@PathVariable Long id) {
         return transferService.findTransferById(id);
     }
 
     @PostMapping("/transfer")
-    public Transfer createTransfer(@RequestBody TransferDto transferDto){
-        return transferService.createTransfer(transferDto);
+    public Transfer createTransfer(@RequestBody TransferDto transferDto) {
+        return transferService.transfer(transferDto);
     }
 }
