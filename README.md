@@ -9,4 +9,4 @@
 
 ### Testing
 
--[Postman collection](https://github.com/lyzunyktaras/FootballManager/tree/main/src/main/resources/postman)
+- [Postman collection](https://github.com/lyzunyktaras/FootballManager/tree/main/src/main/resources/postman)
