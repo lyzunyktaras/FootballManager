@@ -3,6 +3,7 @@ package com.lyzunyk.footballmanager.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Set;
 

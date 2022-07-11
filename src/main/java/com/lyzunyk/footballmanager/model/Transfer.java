@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Entity
@@ -17,5 +18,6 @@ public class Transfer {
     @OneToOne
     private Player player;
 
+    @NotNull
     private double cost;
 }
