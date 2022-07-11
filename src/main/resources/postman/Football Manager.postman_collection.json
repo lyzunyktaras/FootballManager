@@ -1,0 +1,353 @@
+{
+	"info": {
+		"_postman_id": "2d3f2b75-9725-4a99-94db-3d35dfd38f32",
+		"name": "Football Manager",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20603697"
+	},
+	"item": [
+		{
+			"name": "Club",
+			"item": [
+				{
+					"name": "Get all clubs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/clubs",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"clubs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get club by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/club/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"club",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get club by name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/club/?name=Manchester City",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"club",
+								""
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Manchester City"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create club",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Liverpool\",\r\n    \"commission\": 8,\r\n    \"total\": 1000000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/club",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"club"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Player",
+			"item": [
+				{
+					"name": "Get all players",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/players",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"players"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get player by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/player/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"player",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get player by name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/player/?name=Alexander",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"player",
+								""
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Alexander"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Player",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Mohamed\",\r\n    \"surname\": \"Salah\",\r\n    \"age\": 25,\r\n    \"monthExperience\": 60,\r\n    \"clubId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/player",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"player"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transfer",
+			"item": [
+				{
+					"name": "Get all transfers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/transfers",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"transfers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get transfer by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/transfer/4",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"transfer",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get club transfers by club id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/club/1/transfers",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"club",
+								"1",
+								"transfers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create transfer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"clubId\": \"1\",\r\n    \"playerId\": \"2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/transfer",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"transfer"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transaction",
+			"item": [
+				{
+					"name": "Get all transactions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/transactions",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"transactions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get transaction by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/transaction/3",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"transaction",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Wallet",
+			"item": [
+				{
+					"name": "Get wallet by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/wallet/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"wallet",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
