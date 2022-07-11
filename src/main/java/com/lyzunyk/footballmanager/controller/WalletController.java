@@ -21,5 +21,4 @@ public class WalletController {
     public Wallet findWalletById(@PathVariable Long id) {
         return walletService.findWalletById(id);
     }
-
 }

@@ -4,7 +4,6 @@ import com.lyzunyk.footballmanager.dto.TransferDetailsDto;
 import com.lyzunyk.footballmanager.exception.NotExistException;
 import com.lyzunyk.footballmanager.model.Transaction;
 import com.lyzunyk.footballmanager.repository.TransactionRepository;
-import com.lyzunyk.footballmanager.service.ClubService;
 import com.lyzunyk.footballmanager.service.TransactionService;
 import com.lyzunyk.footballmanager.service.WalletService;
 import com.lyzunyk.footballmanager.strategy.ProcessPaymentStrategy;

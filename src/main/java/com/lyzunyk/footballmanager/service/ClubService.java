@@ -21,4 +21,6 @@ public interface ClubService {
     void transferPlayer(Club clubSeller, Club clubBuyer, Player player);
 
     void addTransferToClub(Transfer transfer, Club club);
+
+    List<Transfer> getAllClubTransfers(long id);
 }

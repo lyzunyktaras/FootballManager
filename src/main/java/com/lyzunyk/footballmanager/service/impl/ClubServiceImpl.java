@@ -98,4 +98,10 @@ public class ClubServiceImpl implements ClubService {
         clubRepository.save(club);
     }
 
+    @Override
+    public List<Transfer> getAllClubTransfers(long id) {
+        Club club = findClubById(id);
+        return club.getTransfers();
+    }
+
 }

@@ -10,5 +10,5 @@ public interface TransferService {
 
     List<Transfer> findAll();
 
-    Transfer transfer(TransferDto transferDto) ;
+    Transfer transfer(TransferDto transferDto);
 }

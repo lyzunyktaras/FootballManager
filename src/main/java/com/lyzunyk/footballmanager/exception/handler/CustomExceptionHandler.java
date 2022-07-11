@@ -3,6 +3,7 @@ package com.lyzunyk.footballmanager.exception.handler;
 import com.lyzunyk.footballmanager.exception.ExceptionResponse;
 import com.lyzunyk.footballmanager.exception.NotExistException;
 import com.lyzunyk.footballmanager.exception.ProcessPaymentException;
+import com.lyzunyk.footballmanager.exception.ProcessTransferException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,11 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         return buildExceptionBody(exception, BAD_REQUEST);
     }
 
+    @ExceptionHandler(ProcessTransferException.class)
+    public final ResponseEntity<Object> handleProcessTransferException(ProcessTransferException exception) {
+        return buildExceptionBody(exception, BAD_REQUEST);
+    }
+
     private ResponseEntity<Object> buildExceptionBody(Exception exception, HttpStatus httpStatus) {
         ExceptionResponse exceptionResponse = ExceptionResponse.builder()
                 .status(httpStatus.value())
@@ -50,7 +56,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
                                                                   HttpStatus status,
                                                                   WebRequest request) {
         Map<String, String> errors = new HashMap<>();
-        exception.getBindingResult().getAllErrors().forEach((error) ->{
+        exception.getBindingResult().getAllErrors().forEach((error) -> {
 
             String fieldName = ((FieldError) error).getField();
             String message = error.getDefaultMessage();

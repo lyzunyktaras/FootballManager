@@ -2,6 +2,7 @@ package com.lyzunyk.footballmanager.controller;
 
 import com.lyzunyk.footballmanager.dto.ClubDto;
 import com.lyzunyk.footballmanager.model.Club;
+import com.lyzunyk.footballmanager.model.Transfer;
 import com.lyzunyk.footballmanager.service.ClubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -37,5 +38,10 @@ public class ClubController {
     @PostMapping("/club")
     public Club addClub(@Valid @RequestBody ClubDto clubDto) {
         return clubService.addClub(clubDto);
+    }
+
+    @GetMapping("/club/{id}/transfers")
+    public List<Transfer> getAllClubTransfers(@PathVariable Long id) {
+        return clubService.getAllClubTransfers(id);
     }
 }

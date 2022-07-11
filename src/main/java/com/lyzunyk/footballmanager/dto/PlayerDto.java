@@ -7,17 +7,17 @@ import javax.validation.constraints.*;
 @Data
 public class PlayerDto {
     @NotEmpty
-    @Size(  min = 2,
+    @Size(min = 2,
             max = 50,
             message = "Імя гравця повинно містити від 2 до 50 символів")
-    @Pattern(regexp="^[A-Za-z]*$",message = "Некоректне імя")
+    @Pattern(regexp = "^[A-Za-z]*$", message = "Некоректне імя")
     private String name;
 
     @NotEmpty
-    @Size(  min = 2,
+    @Size(min = 2,
             max = 50,
             message = "Прізвище гравця повинно містити від 2 до 50 символів")
-    @Pattern(regexp="^[A-Za-z]*$",message = "Некоректне прізвище")
+    @Pattern(regexp = "^[A-Za-z]*$", message = "Некоректне прізвище")
     private String surname;
 
     @Min(value = 16, message = "Вік гравця повинен бути більшим або рівним 16")

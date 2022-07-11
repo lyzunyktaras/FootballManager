@@ -6,7 +6,6 @@ import com.lyzunyk.footballmanager.model.Club;
 import com.lyzunyk.footballmanager.model.Transaction;
 import com.lyzunyk.footballmanager.model.Wallet;
 import com.lyzunyk.footballmanager.repository.WalletRepository;
-import com.lyzunyk.footballmanager.service.TransactionService;
 import com.lyzunyk.footballmanager.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

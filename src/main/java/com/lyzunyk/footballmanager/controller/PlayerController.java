@@ -1,7 +1,7 @@
 package com.lyzunyk.footballmanager.controller;
 
-import com.lyzunyk.footballmanager.model.Player;
 import com.lyzunyk.footballmanager.dto.PlayerDto;
+import com.lyzunyk.footballmanager.model.Player;
 import com.lyzunyk.footballmanager.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +34,7 @@ public class PlayerController {
     }
 
     @PostMapping("/player")
-    public Player addPlayer(@Valid @RequestBody PlayerDto playerDto){
+    public Player addPlayer(@Valid @RequestBody PlayerDto playerDto) {
         return playerService.addPlayer(playerDto);
     }
 

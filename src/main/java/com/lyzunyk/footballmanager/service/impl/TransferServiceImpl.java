@@ -3,6 +3,7 @@ package com.lyzunyk.footballmanager.service.impl;
 import com.lyzunyk.footballmanager.dto.TransferDetailsDto;
 import com.lyzunyk.footballmanager.dto.TransferDto;
 import com.lyzunyk.footballmanager.exception.NotExistException;
+import com.lyzunyk.footballmanager.exception.ProcessTransferException;
 import com.lyzunyk.footballmanager.model.Club;
 import com.lyzunyk.footballmanager.model.Player;
 import com.lyzunyk.footballmanager.model.Transaction;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.lyzunyk.footballmanager.utils.CalculationUtil.calculatePlayerCost;
 
@@ -24,6 +27,8 @@ import static com.lyzunyk.footballmanager.utils.CalculationUtil.calculatePlayerC
 public class TransferServiceImpl implements TransferService {
     private static final String TRANSFER_NOT_FOUND_BY_ID = "Transfer with id: %s not found";
     private static final String TRANSFERS_NOT_FOUND = "Transfers not found";
+    private static final String TRANSFER_FAILED_PLAYER_ALREADY_IN_CLUB =
+            "Transfer failed. Player with id: %s %s already in this club";
 
     private final TransferRepository transferRepository;
     private final TransactionService transactionService;
@@ -44,8 +49,8 @@ public class TransferServiceImpl implements TransferService {
     @Override
     public Transfer findTransferById(Long id) {
         Optional<Transfer> transfer = Optional.ofNullable(transferRepository.findTransferById(id));
-        if(transfer.isEmpty()){
-            throw new NotExistException(String.format(TRANSFER_NOT_FOUND_BY_ID,id));
+        if (transfer.isEmpty()) {
+            throw new NotExistException(String.format(TRANSFER_NOT_FOUND_BY_ID, id));
         }
         return transfer.get();
     }
@@ -53,7 +58,7 @@ public class TransferServiceImpl implements TransferService {
     @Override
     public List<Transfer> findAll() {
         List<Transfer> transfers = transferRepository.findAll();
-        if(transfers.isEmpty()){
+        if (transfers.isEmpty()) {
             throw new NotExistException(TRANSFERS_NOT_FOUND);
         }
         return transfers;
@@ -64,6 +69,8 @@ public class TransferServiceImpl implements TransferService {
         Player player = playerService.findPlayerById(transferDto.getPlayerId());
         Club buyer = clubService.findClubById(transferDto.getClubId());
         Club seller = player.getClub();
+
+        validateTransfer(buyer, player);
 
         Transaction transaction = transactionService.processPayment(createTransferDetails(buyer, player));
 
@@ -77,14 +84,14 @@ public class TransferServiceImpl implements TransferService {
         return transfer;
     }
 
-    private Transfer getTransferDetails(Transaction transaction){
+    private Transfer getTransferDetails(Transaction transaction) {
         Transfer transfer = new Transfer();
         transfer.setPlayer(playerService.findPlayerById(transaction.getPlayerId()));
         transfer.setCost(transaction.getTotalPrice());
         return transfer;
     }
 
-    private TransferDetailsDto createTransferDetails(Club buyer, Player player){
+    private TransferDetailsDto createTransferDetails(Club buyer, Player player) {
         TransferDetailsDto transferDetailsDto = new TransferDetailsDto();
         transferDetailsDto.setBuyer(buyer);
         transferDetailsDto.setSeller(player.getClub());
@@ -93,4 +100,14 @@ public class TransferServiceImpl implements TransferService {
         return transferDetailsDto;
     }
 
+    private void validateTransfer(Club buyer, Player player) {
+        Set<Long> playersId = buyer.getPlayers()
+                .stream()
+                .map(Player::getId)
+                .collect(Collectors.toSet());
+        if (playersId.contains(player.getId())) {
+            throw new ProcessTransferException(String.format(TRANSFER_FAILED_PLAYER_ALREADY_IN_CLUB,
+                    player.getId(), player.getName() + " " + player.getSurname()));
+        }
+    }
 }
