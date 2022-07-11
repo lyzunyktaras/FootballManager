@@ -1,6 +1,7 @@
 package com.lyzunyk.footballmanager.service.impl;
 
 import com.lyzunyk.footballmanager.dto.PlayerDto;
+import com.lyzunyk.footballmanager.exception.NotExistException;
 import com.lyzunyk.footballmanager.model.Club;
 import com.lyzunyk.footballmanager.model.Player;
 import com.lyzunyk.footballmanager.repository.PlayerRepository;
@@ -10,9 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PlayerServiceImpl implements PlayerService {
+    private static final String PLAYER_NOT_FOUND_BY_ID = "Player with id: %s not found";
+    private static final String PLAYER_NOT_FOUND_BY_NAME = "Player with name: %s not found";
+    private static final String PLAYERS_NOT_FOUND = "Players not found";
 
     private final PlayerRepository playerRepository;
     private final ClubService clubService;
@@ -26,39 +31,44 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public Player findPlayerById(Long id) {
-        return playerRepository.findPlayerById(id);
+        Optional<Player> player = Optional.ofNullable(playerRepository.findPlayerById(id));
+        if (player.isEmpty()) {
+            throw new NotExistException(String.format(PLAYER_NOT_FOUND_BY_ID, id));
+        }
+        return player.get();
     }
 
     @Override
     public Player findPlayerByName(String name) {
-        return playerRepository.findPlayerByName(name);
+        Optional<Player> player = Optional.ofNullable(playerRepository.findPlayerByName(name));
+        if (player.isEmpty()) {
+            throw new NotExistException(String.format(PLAYER_NOT_FOUND_BY_NAME, name));
+        }
+        return player.get();
     }
 
     @Override
     public List<Player> findAll() {
-        return playerRepository.findAll();
+        List<Player> players = playerRepository.findAll();
+        if (players.isEmpty()) {
+            throw new NotExistException(PLAYERS_NOT_FOUND);
+        }
+        return players;
     }
 
     @Override
     public Player addPlayer(PlayerDto playerDto) {
         Player player = new Player();
+        Club club = clubService.findClubById(playerDto.getClubId());
         player.setName(playerDto.getName());
         player.setSurname(playerDto.getSurname());
         player.setAge(playerDto.getAge());
         player.setMonthsExperience(playerDto.getMonthsExperience());
+        player.setClub(club);
         playerRepository.save(player);
-        clubService.addPlayerToClub(playerDto.getClubId(), player.getId());
+        clubService.addPlayerToClub(club, player);
         return player;
     }
 
-    public void transferPlayer(Long playerId, Long clubId) {
-        Player player = findPlayerById(playerId);
-        Club club = clubService.findClubById(clubId);
-        clubService.addPlayerToClub(clubId, playerId);
-    }
 
-    @Override
-    public Double calculatePlayerCost(Player player) {
-        return (player.getMonthsExperience() * 100000) / player.getAge();
-    }
 }

@@ -13,6 +13,4 @@ public interface PlayerService {
     List<Player> findAll();
 
     Player addPlayer(PlayerDto playerDto);
-
-    Double calculatePlayerCost(Player player);
 }

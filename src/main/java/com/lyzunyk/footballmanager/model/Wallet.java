@@ -12,12 +12,10 @@ public class Wallet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private double total;
 
-    @OneToOne
-    private Club club;
-
-    @OneToMany
+    @ManyToMany
     private Set<Transaction> transactions;
 
 }
