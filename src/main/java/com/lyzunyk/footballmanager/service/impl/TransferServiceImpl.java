@@ -1,7 +1,9 @@
 package com.lyzunyk.footballmanager.service.impl;
 
-import com.lyzunyk.footballmanager.dto.TransferDetailsDto;
-import com.lyzunyk.footballmanager.dto.TransferDto;
+import com.lyzunyk.footballmanager.converter.ResponseConverter;
+import com.lyzunyk.footballmanager.dto.transfer.TransferDetailsDto;
+import com.lyzunyk.footballmanager.dto.transfer.TransferDto;
+import com.lyzunyk.footballmanager.dto.transfer.TransferResponse;
 import com.lyzunyk.footballmanager.exception.NotExistException;
 import com.lyzunyk.footballmanager.exception.ProcessTransferException;
 import com.lyzunyk.footballmanager.model.Club;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.lyzunyk.footballmanager.utils.CalculationUtil.calculatePlayerCost;
@@ -34,20 +37,23 @@ public class TransferServiceImpl implements TransferService {
     private final TransactionService transactionService;
     private final PlayerService playerService;
     private final ClubService clubService;
+    private final ResponseConverter responseConverter;
 
     @Autowired
     public TransferServiceImpl(TransferRepository transferRepository,
                                TransactionService transactionService,
                                PlayerService playerService,
-                               ClubService clubService) {
+                               ClubService clubService,
+                               ResponseConverter responseConverter) {
         this.transferRepository = transferRepository;
         this.transactionService = transactionService;
         this.playerService = playerService;
         this.clubService = clubService;
+        this.responseConverter = responseConverter;
     }
 
     @Override
-    public Transfer findTransferById(Long id) {
+    public Transfer findTransferById(String id) {
         Optional<Transfer> transfer = Optional.ofNullable(transferRepository.findTransferById(id));
         if (transfer.isEmpty()) {
             throw new NotExistException(String.format(TRANSFER_NOT_FOUND_BY_ID, id));
@@ -56,8 +62,11 @@ public class TransferServiceImpl implements TransferService {
     }
 
     @Override
-    public List<Transfer> findAll() {
-        return transferRepository.findAll();
+    public List<TransferResponse> findAll() {
+        return transferRepository.findAll()
+                .stream()
+                .map(responseConverter::convertToTransferResponse)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -74,6 +83,8 @@ public class TransferServiceImpl implements TransferService {
 
         clubService.transferPlayer(seller, buyer, player);
 
+        transfer.setId(UUID.randomUUID().toString());
+
         transferRepository.save(transfer);
         clubService.addTransferToClub(transfer, buyer);
         clubService.addTransferToClub(transfer, seller);
@@ -82,7 +93,7 @@ public class TransferServiceImpl implements TransferService {
 
     private Transfer getTransferDetails(Transaction transaction) {
         Transfer transfer = new Transfer();
-        transfer.setPlayer(playerService.findPlayerById(transaction.getPlayerId()));
+        transfer.setPlayer(transaction.getPlayer());
         transfer.setCost(transaction.getTotalPrice());
         return transfer;
     }
@@ -97,7 +108,7 @@ public class TransferServiceImpl implements TransferService {
     }
 
     private void validateTransfer(Club buyer, Player player) {
-        Set<Long> playersId = buyer.getPlayers()
+        Set<String> playersId = buyer.getPlayers()
                 .stream()
                 .map(Player::getId)
                 .collect(Collectors.toSet());

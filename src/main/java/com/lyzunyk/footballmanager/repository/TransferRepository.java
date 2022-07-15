@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface TransferRepository extends JpaRepository<Transfer, Long> {
-    Transfer findTransferById(Long id);
+public interface TransferRepository extends JpaRepository<Transfer, String> {
+    Transfer findTransferById(String id);
 
     List<Transfer> findAll();
 }

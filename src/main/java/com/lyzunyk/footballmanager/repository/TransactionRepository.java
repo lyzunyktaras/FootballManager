@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-    Transaction findTransactionById(Long id);
+public interface TransactionRepository extends JpaRepository<Transaction, String> {
+    Transaction findTransactionById(String id);
 
     List<Transaction> findAll();
 }

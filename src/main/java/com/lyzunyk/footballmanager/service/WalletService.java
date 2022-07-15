@@ -5,9 +5,11 @@ import com.lyzunyk.footballmanager.model.Transaction;
 import com.lyzunyk.footballmanager.model.Wallet;
 
 public interface WalletService {
-    Wallet findWalletById(Long id);
+    Wallet findWalletById(String id);
 
     Wallet addWallet(Club club, double total);
+
+    void deleteWallet(Wallet wallet);
 
     void processPayment(Club clubSeller, Club clubBuyer, double totalTransferPrice);
 

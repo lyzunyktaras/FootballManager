@@ -1,16 +1,16 @@
-package com.lyzunyk.footballmanager.dto;
+package com.lyzunyk.footballmanager.dto.club;
 
+import com.lyzunyk.footballmanager.converter.marker.Convertable;
 import lombok.Data;
 
 import javax.validation.constraints.*;
 
 
 @Data
-public class ClubDto {
+public class ClubProfile implements Convertable {
 
     @NotEmpty
-    @Size(min = 3,
-            max = 50,
+    @Size(min = 3, max = 50,
             message = "Назва клубу повинна містити від 3 до 50 символів")
     @Pattern(regexp = "^[A-Za-z]*$", message = "Некоректна назва клубу")
     private String name;

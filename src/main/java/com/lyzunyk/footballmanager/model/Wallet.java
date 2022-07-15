@@ -1,19 +1,25 @@
 package com.lyzunyk.footballmanager.model;
 
+import com.lyzunyk.footballmanager.converter.marker.Convertable;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Set;
 
 @Data
 @Entity
 @Table(name = "wallet")
-public class Wallet {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@EqualsAndHashCode(exclude = "transactions")
+@ToString(exclude = "transactions")
 
-    private double total;
+public class Wallet implements Convertable {
+    @Id
+    private String id;
+
+    private BigDecimal total;
 
     @ManyToMany
     private Set<Transaction> transactions;

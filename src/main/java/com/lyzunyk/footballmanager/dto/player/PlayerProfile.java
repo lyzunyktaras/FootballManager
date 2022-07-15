@@ -1,11 +1,12 @@
-package com.lyzunyk.footballmanager.dto;
+package com.lyzunyk.footballmanager.dto.player;
 
+import com.lyzunyk.footballmanager.converter.marker.Convertable;
 import lombok.Data;
 
 import javax.validation.constraints.*;
 
 @Data
-public class PlayerDto {
+public class PlayerProfile  implements Convertable {
     @NotEmpty
     @Size(min = 2,
             max = 50,
@@ -31,5 +32,5 @@ public class PlayerDto {
     private double monthsExperience;
 
     @NotNull(message = "Вкажіть [id] клубу до якого входить гравець")
-    private Long clubId;
+    private String clubId;
 }
