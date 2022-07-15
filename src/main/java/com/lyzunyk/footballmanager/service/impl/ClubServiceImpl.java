@@ -12,6 +12,7 @@ import com.lyzunyk.footballmanager.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -33,6 +34,7 @@ public class ClubServiceImpl implements ClubService {
         this.clubRepository = clubRepository;
         this.walletService = walletService;
         this.playerRepository = playerRepository;
+
     }
 
     @Override
@@ -55,11 +57,7 @@ public class ClubServiceImpl implements ClubService {
 
     @Override
     public List<Club> findAll() {
-        List<Club> clubs = clubRepository.findAll();
-        if (clubs.isEmpty()) {
-            throw new NotExistException(CLUBS_NOT_FOUND);
-        }
-        return clubs;
+        return clubRepository.findAll();
     }
 
     @Override
@@ -104,4 +102,38 @@ public class ClubServiceImpl implements ClubService {
         return club.getTransfers();
     }
 
+    @Override
+    @Transactional
+    public void deleteClubById(Long id) {
+        Club club = findClubById(id);
+        club.getPlayers().forEach(player -> player.setClub(null));
+        clubRepository.delete(club);
+    }
+
+    @Override
+    public Club updateClub(Long id, ClubDto clubDto) {
+        Club club = findClubById(id);
+
+        updateName(club, clubDto.getName());
+        updateCommission(club, club.getCommission());
+        updateTotal(club, clubDto.getTotal());
+
+        clubRepository.save(club);
+        return club;
+    }
+
+    private void updateName(Club club, String name) {
+        if (name != null)
+            club.setName(name);
+    }
+
+    private void updateCommission(Club club, double commission) {
+        if (commission != 0)
+            club.setCommission(commission);
+    }
+
+    private void updateTotal(Club club, double total) {
+        if (total != 0)
+            club.getWallet().setTotal(total);
+    }
 }

@@ -4,6 +4,7 @@ import com.lyzunyk.footballmanager.dto.TransferDetailsDto;
 import com.lyzunyk.footballmanager.exception.NotExistException;
 import com.lyzunyk.footballmanager.model.Transaction;
 import com.lyzunyk.footballmanager.repository.TransactionRepository;
+import com.lyzunyk.footballmanager.service.ClubService;
 import com.lyzunyk.footballmanager.service.TransactionService;
 import com.lyzunyk.footballmanager.service.WalletService;
 import com.lyzunyk.footballmanager.strategy.ProcessPaymentStrategy;
@@ -22,14 +23,17 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final WalletService walletService;
     private final ProcessPaymentStrategy processPaymentStrategy;
+    private final ClubService clubService;
 
     @Autowired
     public TransactionServiceImpl(TransactionRepository transactionRepository,
                                   WalletService walletService,
-                                  ProcessPaymentStrategy processPaymentStrategy) {
+                                  ProcessPaymentStrategy processPaymentStrategy,
+                                  ClubService clubService) {
         this.transactionRepository = transactionRepository;
         this.walletService = walletService;
         this.processPaymentStrategy = processPaymentStrategy;
+        this.clubService = clubService;
     }
 
     @Override
@@ -43,11 +47,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<Transaction> findAll() {
-        List<Transaction> transactions = transactionRepository.findAll();
-        if (transactions.isEmpty()) {
-            throw new NotExistException(TRANSACTIONS_NOT_FOUND);
-        }
-        return transactions;
+        return transactionRepository.findAll();
     }
 
     @Override

@@ -49,11 +49,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public List<Player> findAll() {
-        List<Player> players = playerRepository.findAll();
-        if (players.isEmpty()) {
-            throw new NotExistException(PLAYERS_NOT_FOUND);
-        }
-        return players;
+        return playerRepository.findAll();
     }
 
     @Override
@@ -70,5 +66,53 @@ public class PlayerServiceImpl implements PlayerService {
         return player;
     }
 
+    @Override
+    public void deletePlayerById(Long id) {
+        Player player = findPlayerById(id);
+        player.getClub().getPlayers().remove(player);
+        playerRepository.delete(player);
+    }
 
+    @Override
+    public Player updatePlayer(Long id, PlayerDto playerDto) {
+        Player player = findPlayerById(id);
+
+        updateName(player, playerDto.getName());
+        updateSurname(player, player.getSurname());
+        updateAge(player, playerDto.getAge());
+        updateMonthsExperience(player, player.getMonthsExperience());
+        updateClub(player, playerDto.getClubId());
+
+        playerRepository.save(player);
+        return player;
+    }
+
+    private void updateName(Player player, String name) {
+        if (name != null)
+            player.setName(name);
+    }
+
+    private void updateSurname(Player player, String surname) {
+        if (surname != null)
+            player.setSurname(surname);
+    }
+
+    private void updateAge(Player player, int age) {
+        if (age != 0)
+            player.setAge(age);
+    }
+
+    private void updateMonthsExperience(Player player, double monthsExperience) {
+        if (monthsExperience != 0)
+            player.setMonthsExperience(monthsExperience);
+    }
+
+    private void updateClub(Player player, Long clubId){
+        if(clubId != null){
+            player.getClub().getPlayers().remove(player);
+            Club club = clubService.findClubById(clubId);
+            player.setClub(club);
+            club.getPlayers().add(player);
+        }
+    }
 }

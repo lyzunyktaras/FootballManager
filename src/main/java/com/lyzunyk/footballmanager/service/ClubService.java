@@ -23,4 +23,9 @@ public interface ClubService {
     void addTransferToClub(Transfer transfer, Club club);
 
     List<Transfer> getAllClubTransfers(long id);
+
+    void deleteClubById(Long id);
+
+    Club updateClub(Long id, ClubDto clubDto);
+
 }

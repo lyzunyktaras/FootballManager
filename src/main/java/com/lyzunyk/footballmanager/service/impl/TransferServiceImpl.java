@@ -57,11 +57,7 @@ public class TransferServiceImpl implements TransferService {
 
     @Override
     public List<Transfer> findAll() {
-        List<Transfer> transfers = transferRepository.findAll();
-        if (transfers.isEmpty()) {
-            throw new NotExistException(TRANSFERS_NOT_FOUND);
-        }
-        return transfers;
+        return transferRepository.findAll();
     }
 
     @Override
@@ -110,4 +106,6 @@ public class TransferServiceImpl implements TransferService {
                     player.getId(), player.getName() + " " + player.getSurname()));
         }
     }
+
+
 }

@@ -13,4 +13,8 @@ public interface PlayerService {
     List<Player> findAll();
 
     Player addPlayer(PlayerDto playerDto);
+
+    void deletePlayerById(Long id);
+
+    Player updatePlayer(Long id, PlayerDto playerDto);
 }
