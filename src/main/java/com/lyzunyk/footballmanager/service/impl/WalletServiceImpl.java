@@ -10,8 +10,11 @@ import com.lyzunyk.footballmanager.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class WalletServiceImpl implements WalletService {
@@ -26,7 +29,7 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public Wallet findWalletById(Long id) {
+    public Wallet findWalletById(String id) {
         Optional<Wallet> wallet = Optional.ofNullable(walletRepository.findWalletById(id));
         if (wallet.isEmpty()) {
             throw new NotExistException(String.format(WALLET_NOT_FOUND_BY_ID, id));
@@ -37,18 +40,24 @@ public class WalletServiceImpl implements WalletService {
     @Override
     public Wallet addWallet(Club club, double total) {
         Wallet wallet = new Wallet();
-        wallet.setTotal(total);
+        wallet.setId(UUID.randomUUID().toString());
+        wallet.setTotal(BigDecimal.valueOf(total));
         walletRepository.save(wallet);
         return wallet;
+    }
+
+    @Override
+    public void deleteWallet(Wallet wallet){
+        walletRepository.delete(wallet);
     }
 
     @Override
     public void processPayment(Club seller, Club buyer, double totalPrice) {
         Wallet sellerWallet = seller.getWallet();
         Wallet buyerWallet = buyer.getWallet();
-        if (buyerWallet.getTotal() > totalPrice) {
-            buyerWallet.setTotal(buyerWallet.getTotal() - totalPrice);
-            sellerWallet.setTotal(sellerWallet.getTotal() + totalPrice);
+        if (buyerWallet.getTotal().floatValue() > totalPrice) {
+            buyerWallet.setTotal(BigDecimal.valueOf(buyerWallet.getTotal().floatValue() - totalPrice));
+            sellerWallet.setTotal(BigDecimal.valueOf(sellerWallet.getTotal().floatValue() + totalPrice));
         } else {
             throw new ProcessPaymentException(String.format(NOT_ENOUGH_FOUNDS, buyer.getName()));
         }

@@ -1,6 +1,7 @@
 package com.lyzunyk.footballmanager.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.lyzunyk.footballmanager.converter.marker.Convertable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -10,10 +11,10 @@ import javax.persistence.*;
 @Data
 @EqualsAndHashCode(exclude = "club")
 @Table(name = "player")
-public class Player {
+
+public class Player implements Convertable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private String id;
 
     private String name;
 

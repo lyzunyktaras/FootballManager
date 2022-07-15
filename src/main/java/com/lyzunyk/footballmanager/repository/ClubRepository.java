@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ClubRepository extends JpaRepository<Club, Long> {
-    Club findClubById(Long id);
+public interface ClubRepository extends JpaRepository<Club, String> {
+    Club findClubById(String id);
 
     Club findClubByName(String name);
 

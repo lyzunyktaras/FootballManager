@@ -1,6 +1,9 @@
 package com.lyzunyk.footballmanager.service;
 
-import com.lyzunyk.footballmanager.dto.ClubDto;
+import com.lyzunyk.footballmanager.dto.club.ClubProfile;
+import com.lyzunyk.footballmanager.dto.club.ClubResponse;
+import com.lyzunyk.footballmanager.dto.transaction.TransactionResponse;
+import com.lyzunyk.footballmanager.dto.transfer.TransferResponse;
 import com.lyzunyk.footballmanager.model.Club;
 import com.lyzunyk.footballmanager.model.Player;
 import com.lyzunyk.footballmanager.model.Transfer;
@@ -8,13 +11,13 @@ import com.lyzunyk.footballmanager.model.Transfer;
 import java.util.List;
 
 public interface ClubService {
-    Club findClubById(Long id);
+    Club findClubById(String id);
 
     Club findClubByName(String name);
 
-    List<Club> findAll();
+    List<ClubResponse> findAll();
 
-    Club addClub(ClubDto clubDto);
+    Club addClub(ClubProfile clubProfile);
 
     void addPlayerToClub(Club club, Player player);
 
@@ -22,5 +25,12 @@ public interface ClubService {
 
     void addTransferToClub(Transfer transfer, Club club);
 
-    List<Transfer> getAllClubTransfers(long id);
+    List<TransferResponse> getAllClubTransfers(String id);
+
+    List<TransactionResponse> getAllClubTransaction(String id);
+
+    void deleteClubById(String id);
+
+    Club updateClub(String id, ClubProfile clubProfile);
+
 }

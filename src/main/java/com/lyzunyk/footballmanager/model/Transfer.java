@@ -1,23 +1,27 @@
 package com.lyzunyk.footballmanager.model;
 
+import com.lyzunyk.footballmanager.converter.marker.Convertable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 @Data
 @Entity
 @Table(name = "transfer")
 @EqualsAndHashCode(exclude = "player")
-public class Transfer {
+@ToString(exclude = "player")
+
+public class Transfer implements Convertable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private String id;
 
     @OneToOne
     private Player player;
 
     @NotNull
-    private double cost;
+    private BigDecimal cost;
 }

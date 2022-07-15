@@ -1,6 +1,10 @@
 package com.lyzunyk.footballmanager.service.impl;
 
-import com.lyzunyk.footballmanager.dto.ClubDto;
+import com.lyzunyk.footballmanager.converter.ResponseConverter;
+import com.lyzunyk.footballmanager.dto.club.ClubProfile;
+import com.lyzunyk.footballmanager.dto.club.ClubResponse;
+import com.lyzunyk.footballmanager.dto.transaction.TransactionResponse;
+import com.lyzunyk.footballmanager.dto.transfer.TransferResponse;
 import com.lyzunyk.footballmanager.exception.NotExistException;
 import com.lyzunyk.footballmanager.model.Club;
 import com.lyzunyk.footballmanager.model.Player;
@@ -12,9 +16,10 @@ import com.lyzunyk.footballmanager.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import javax.transaction.Transactional;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ClubServiceImpl implements ClubService {
@@ -25,18 +30,21 @@ public class ClubServiceImpl implements ClubService {
     private final ClubRepository clubRepository;
     private final WalletService walletService;
     private final PlayerRepository playerRepository;
+    private final ResponseConverter responseConverter;
 
     @Autowired
     public ClubServiceImpl(ClubRepository clubRepository,
                            WalletService walletService,
-                           PlayerRepository playerRepository) {
+                           PlayerRepository playerRepository,
+                           ResponseConverter responseConverter) {
         this.clubRepository = clubRepository;
         this.walletService = walletService;
         this.playerRepository = playerRepository;
+        this.responseConverter = responseConverter;
     }
 
     @Override
-    public Club findClubById(final Long id) {
+    public Club findClubById(final String id) {
         Optional<Club> club = Optional.ofNullable(clubRepository.findClubById(id));
         if (club.isEmpty()) {
             throw new NotExistException(String.format(CLUB_NOT_FOUND_BY_ID, id));
@@ -54,20 +62,20 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
-    public List<Club> findAll() {
-        List<Club> clubs = clubRepository.findAll();
-        if (clubs.isEmpty()) {
-            throw new NotExistException(CLUBS_NOT_FOUND);
-        }
-        return clubs;
+    public List<ClubResponse> findAll() {
+        return clubRepository.findAll()
+                .stream()
+                .map(responseConverter::convertToClubResponse)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Club addClub(ClubDto clubDto) {
+    public Club addClub(ClubProfile clubProfile) {
         Club club = new Club();
-        club.setName(clubDto.getName());
-        club.setCommission(clubDto.getCommission());
-        club.setWallet(walletService.addWallet(club, clubDto.getTotal()));
+        club.setId(UUID.randomUUID().toString());
+        club.setName(clubProfile.getName());
+        club.setCommission(clubProfile.getCommission());
+        club.setWallet(walletService.addWallet(club, clubProfile.getTotal()));
         clubRepository.save(club);
         return club;
     }
@@ -99,9 +107,58 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
-    public List<Transfer> getAllClubTransfers(long id) {
+    public List<TransferResponse> getAllClubTransfers(String id) {
         Club club = findClubById(id);
-        return club.getTransfers();
+        return club.getTransfers()
+                .stream()
+                .map(responseConverter::convertToTransferResponse)
+                .collect(Collectors.toList());
     }
+
+    @Override
+    public List<TransactionResponse> getAllClubTransaction(String id) {
+        Club club = findClubById(id);
+        return club.getWallet().getTransactions()
+                .stream()
+                .map(responseConverter::convertToTransactionResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void deleteClubById(String id) {
+        Club club = findClubById(id);
+        club.getPlayers().forEach(player -> player.setClub(null));
+        walletService.deleteWallet(club.getWallet());
+        clubRepository.delete(club);
+    }
+
+    @Override
+    public Club updateClub(String id, ClubProfile clubProfile) {
+        Club club = findClubById(id);
+
+        updateName(club, clubProfile.getName());
+        updateCommission(club, club.getCommission());
+        updateTotal(club, clubProfile.getTotal());
+
+        clubRepository.save(club);
+        return club;
+    }
+
+    private void updateName(Club club, String name) {
+        if (name != null)
+            club.setName(name);
+    }
+
+    private void updateCommission(Club club, double commission) {
+        if (commission != 0)
+            club.setCommission(commission);
+    }
+
+    private void updateTotal(Club club, double total) {
+        if (total != 0)
+            club.getWallet().setTotal(BigDecimal.valueOf(total));
+    }
+
 
 }

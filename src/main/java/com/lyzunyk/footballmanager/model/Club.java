@@ -1,6 +1,8 @@
 package com.lyzunyk.footballmanager.model;
 
+import com.lyzunyk.footballmanager.converter.marker.Convertable;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -9,10 +11,11 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "club")
-public class Club {
+@ToString(exclude = "players")
+
+public class Club implements Convertable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     private String name;
 
