@@ -33,14 +33,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/club/1",
+							"raw": "localhost:8080/club/15e3578f-d26a-4b0a-b741-b19ded0e318e",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"club",
-								"1"
+								"15e3578f-d26a-4b0a-b741-b19ded0e318e"
 							]
 						}
 					},
@@ -78,7 +78,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Liverpool\",\r\n    \"commission\": 8,\r\n    \"total\": 1000000\r\n}",
+							"raw": "{\r\n    \"name\": \"Barcelona\",\r\n    \"commission\": 8,\r\n    \"total\": 1000000\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -93,6 +93,53 @@
 							"port": "8080",
 							"path": [
 								"club"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update club",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Changed name\",\r\n    \"commission\": 9,\r\n    \"total\": 50000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/club/15e3578f-d26a-4b0a-b741-b19ded0e318e",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"club",
+								"15e3578f-d26a-4b0a-b741-b19ded0e318e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete club",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/club/15e3578f-d26a-4b0a-b741-b19ded0e318e",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"club",
+								"15e3578f-d26a-4b0a-b741-b19ded0e318e"
 							]
 						}
 					},
@@ -127,14 +174,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/player/1",
+							"raw": "localhost:8080/player/e669c9b9-2cf2-4a0a-97de-52ad07ae5ffb",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"player",
-								"1"
+								"e669c9b9-2cf2-4a0a-97de-52ad07ae5ffb"
 							]
 						}
 					},
@@ -172,7 +219,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Mohamed\",\r\n    \"surname\": \"Salah\",\r\n    \"age\": 25,\r\n    \"monthExperience\": 60,\r\n    \"clubId\": 1\r\n}",
+							"raw": "{\r\n    \"name\": \"Roberto\",\r\n    \"surname\": \"Firmino\",\r\n    \"age\": 25,\r\n    \"monthsExperience\": 60,\r\n    \"clubId\": \"15e3578f-d26a-4b0a-b741-b19ded0e318e\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -187,6 +234,53 @@
 							"port": "8080",
 							"path": [
 								"player"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Player",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Changed\",\r\n    \"surname\": \"Changed\",\r\n    \"age\": 19,\r\n    \"monthsExperience\": 30,\r\n    \"clubId\": \"bc2f785b-8dc2-4ad5-b780-fc664589a7a4\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/player/e669c9b9-2cf2-4a0a-97de-52ad07ae5ffb",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"player",
+								"e669c9b9-2cf2-4a0a-97de-52ad07ae5ffb"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Player",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/player/e669c9b9-2cf2-4a0a-97de-52ad07ae5ffb",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"player",
+								"e669c9b9-2cf2-4a0a-97de-52ad07ae5ffb"
 							]
 						}
 					},
@@ -221,14 +315,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/transfer/4",
+							"raw": "localhost:8080/transfer/b541ae08-d61f-4157-bd10-c102e6292f2d",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"transfer",
-								"4"
+								"b541ae08-d61f-4157-bd10-c102e6292f2d"
 							]
 						}
 					},
@@ -240,14 +334,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/club/1/transfers",
+							"raw": "localhost:8080/club/15e3578f-d26a-4b0a-b741-b19ded0e318e/transfers",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"club",
-								"1",
+								"15e3578f-d26a-4b0a-b741-b19ded0e318e",
 								"transfers"
 							]
 						}
@@ -261,7 +355,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"clubId\": \"1\",\r\n    \"playerId\": \"2\"\r\n}",
+							"raw": "{\r\n    \"clubId\": \"15e3578f-d26a-4b0a-b741-b19ded0e318e\",\r\n    \"playerId\": \"eb3b43c3-acf0-4adf-a6ff-037cb6541b28\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -310,14 +404,34 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/transaction/3",
+							"raw": "localhost:8080/transaction/0b836802-334e-4470-9010-a4488583f8d5",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"transaction",
-								"3"
+								"0b836802-334e-4470-9010-a4488583f8d5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all club transactions by club id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/club/15e3578f-d26a-4b0a-b741-b19ded0e318e/transactions",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"club",
+								"15e3578f-d26a-4b0a-b741-b19ded0e318e",
+								"transactions"
 							]
 						}
 					},
@@ -334,14 +448,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/wallet/1",
+							"raw": "localhost:8080/wallet/b5a9a671-91da-4149-bac6-b508c51c040b",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"wallet",
-								"1"
+								"b5a9a671-91da-4149-bac6-b508c51c040b"
 							]
 						}
 					},
