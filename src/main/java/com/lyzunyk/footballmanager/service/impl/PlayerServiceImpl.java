@@ -90,9 +90,9 @@ public class PlayerServiceImpl implements PlayerService {
         Player player = findPlayerById(id);
 
         updateName(player, playerProfile.getName());
-        updateSurname(player, player.getSurname());
+        updateSurname(player, playerProfile.getSurname());
         updateAge(player, playerProfile.getAge());
-        updateMonthsExperience(player, player.getMonthsExperience());
+        updateMonthsExperience(player, playerProfile.getMonthsExperience());
         updateClub(player, playerProfile.getClubId());
 
         playerRepository.save(player);
