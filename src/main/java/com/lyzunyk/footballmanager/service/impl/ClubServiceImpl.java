@@ -138,7 +138,7 @@ public class ClubServiceImpl implements ClubService {
         Club club = findClubById(id);
 
         updateName(club, clubProfile.getName());
-        updateCommission(club, club.getCommission());
+        updateCommission(club, clubProfile.getCommission());
         updateTotal(club, clubProfile.getTotal());
 
         clubRepository.save(club);
