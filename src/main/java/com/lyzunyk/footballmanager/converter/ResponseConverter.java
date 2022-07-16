@@ -36,8 +36,9 @@ public class ResponseConverter {
     public PlayerResponse convertToPlayerResponse(Player player) {
         PlayerResponse playerResponse = dtoConverter.convertToDto(player, PlayerResponse.class);
 
-        playerResponse.setClubName(player.getClub().getName());
-
+        if (player.getClub() != null) {
+            playerResponse.setClubName(player.getClub().getName());
+        }
         return playerResponse;
     }
 
